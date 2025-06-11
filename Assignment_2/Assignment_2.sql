@@ -1,31 +1,39 @@
 CREATE TABLE Customers (
-customer_id INT PRIMARY KEY,
-name VARCHAR(100),
-email VARCHAR(100),
+customer_id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+email VARCHAR(100) UNIQUE,
 city VARCHAR(50),
-signupdate DATE);
+signupdate DATE );
 
 CREATE TABLE Orders (
-order_id INT PRIMARY KEY,
+order_id INT AUTO_INCREMENT PRIMARY KEY,
 customer_id INT,
 orderdate DATE,
-totalamount DECIMAL(10,2),
-FOREIGN KEY(customer_id) REFERENCES Customers (customer_id));
+totalamount DECIMAL(10,2) CHECK(totalamount>0),
+CONSTRAINT fk_customer_id FOREIGN KEY(customer_id) REFERENCES Customers (customer_id));
 
-CREATE TABLE products (
-product_id INT PRIMARY KEY,
-productname VARCHAR(100),
-category VARCHAR(50),
-price DECIMAL(10,2));
+CREATE TABLE Products (
+product_id INT AUTO_INCREMENT PRIMARY KEY,
+productname VARCHAR(100) NOT NULL,
+category VARCHAR(50) NOT NULL,
+price DECIMAL(10,2) CHECK (price>0));
 
-CREATE TABLE orderdetails(
-orderdetail_id INT PRIMARY KEY,
+CREATE TABLE OrderDetails(
+orderdetail_id INT AUTO_INCREMENT PRIMARY KEY,
 order_id INT,
 product_id INT,
-quantity INT,
-price DECIMAL(10,2),
-FOREIGN KEY(order_id) REFERENCES orders(order_id),
-FOREIGN KEY (product_id) REFERENCES products (product_id));
+quantity INT CHECK (quantity>0),
+price DECIMAL(10,2) CHECK (price>0),
+CONSTRAINT fk_order_id FOREIGN KEY(order_id) REFERENCES Orders(order_id),
+CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES Products (product_id));
+
+
+CREATE INDEX idx_customers_city ON Customers(city);
+CREATE INDEX idx_orders_orderdate ON Orders(orderdate);
+CREATE INDEX idx_orders_customer_id ON Orders(customer_id);
+CREATE INDEX idx_products_category ON Products(category);
+CREATE INDEX idx_orderdetails_product_id ON OrderDetails(product_id);
+CREATE INDEX idx_orderdetails_order_id ON OrderDetails(order_id);
 
 INSERT INTO Customers (customer_id, name, email, city, signupdate) VALUES
 (1, 'Aisha Mehra', 'aisha.mehra@example.com', 'Mumbai', '2024-03-10'),
@@ -62,24 +70,24 @@ INSERT INTO OrderDetails (orderdetail_id, order_id, product_id, quantity, price)
 
 -- answers: basic queries
 SELECT * FROM Customers;
-SELECT * FROM Orders WHERE orderdate >= curdate() - INTERVAL 30 DAY;
-SELECT productname,price FROM products;
-SELECT COUNT(product_id) AS product_count,category FROM products GROUP BY category;
+SELECT Orders.order_id,Orders.customer_id,Orders.orderdate,Orders.totalamount FROM Orders WHERE orderdate >= curdate() - INTERVAL 30 DAY;
+SELECT productname,price FROM Products;
+SELECT COUNT(product_id) AS product_count,category FROM Products GROUP BY category;
 
 -- filtering and conditions
-SELECT * FROM customers WHERE city='Mumbai';
-SELECT * FROM Orders WHERE totalamount>5000;
-SELECT * FROM Customers WHERE signupdate>'2024-01-01';
+SELECT Customers.customer_id, Customers.name, Customers.city FROM Customers WHERE city='Mumbai';
+SELECT Orders.order_id, Orders.customer_id, Orders.totalamount FROM Orders WHERE totalamount>5000;
+SELECT Customers.customer_id, Customers.name,Customers.signupdate FROM Customers WHERE signupdate>'2024-01-01';
 
 -- joins
 SELECT Customers.name,Orders.order_id,Orders.orderdate,Orders.totalamount FROM 
 Orders JOIN Customers ON Orders.customer_id=Customers.customer_id;
 
-SELECT Orders.order_id,products.productname,orderdetails.quantity FROM
-orderdetails JOIN products ON orderdetails.product_id=products.product_id
- JOIN Orders ON Orders.order_id=orderdetails.order_id;
+SELECT Orders.order_id,Products.productname,OrderDetails.quantity FROM
+OrderDetails JOIN Products ON OrderDetails.product_id=Products.product_id
+ JOIN Orders ON Orders.order_id=OrderDetails.order_id;
 
-SELECT * FROM Customers LEFT JOIN Orders ON Customers.customer_id=Orders.customer_id
+SELECT Customers.customer_id, Customers.name, Orders.order_id  FROM Customers LEFT JOIN Orders ON Customers.customer_id=Orders.customer_id
 WHERE Orders.order_id IS NULL;
 
 -- aggregation and grouping
@@ -87,8 +95,8 @@ SELECT Customers.customer_id,Customers.name,SUM(Orders.totalamount) FROM
 Customers JOIN Orders ON Customers.customer_id=Orders.customer_id
 GROUP BY Customers.customer_id;
 
-SELECT products.productname,SUM(orderdetails.quantity) AS totalquantity FROM products
-JOIN orderdetails ON products.product_id=orderdetails.product_id GROUP BY products.productname
+SELECT Products.productname,SUM(OrderDetails.quantity) AS totalquantity FROM Products
+JOIN OrderDetails ON Products.product_id=OrderDetails.product_id GROUP BY Products.productname
 ORDER BY totalquantity DESC 
 LIMIT 1;
 
@@ -96,15 +104,15 @@ SELECT Customers.customer_id,Customers.name, AVG(Orders.totalamount) AS avg_amou
 FROM Customers JOIN Orders
 ON Customers.customer_id=Orders.customer_id GROUP BY Customers.customer_id;
 
-SELECT SUM((orderdetails.price) * (orderdetails.quantity)) AS total_products,products.category FROM
-orderdetails JOIN products ON orderdetails.product_id=products.product_id GROUP BY products.category;
+SELECT SUM((OrderDetails.price) * (OrderDetails.quantity)) AS total_products,Products.category FROM
+OrderDetails JOIN Products ON OrderDetails.product_id=Products.product_id GROUP BY Products.category;
 
 -- subqueries
 SELECT customer_id,name FROM ( SELECT Customers.customer_id,Customers.name,SUM(Orders.totalamount) AS totalspent
 FROM Customers JOIN Orders ON Customers.customer_id=Orders.customer_id GROUP BY Customers.customer_id,Customers.name) 
 AS totals WHERE totalspent > (SELECT AVG(totalamount) FROM Orders);
 
-SELECT * FROM products WHERE product_id NOT IN(SELECT DISTINCT product_id FROM orderdetails);
+SELECT Products.product_id, Products.productname, Products.category, Products.price FROM Products WHERE product_id NOT IN(SELECT DISTINCT product_id FROM orderdetails);
 
 SELECT Customers.customer_id,Customers.name, MAX(Orders.orderdate) FROM Customers JOIN Orders
 ON Customers.customer_id=Orders.customer_id GROUP BY Customers.customer_id;
@@ -119,6 +127,6 @@ SELECT Customers.customer_id,Customers.name,COUNT(Orders.order_id) AS ordercount
 Customers JOIN Orders ON Customers.customer_id=Orders.customer_id
 GROUP BY Customers.customer_id,Customers.name ORDER BY ordercount DESC LIMIT 3;
 
-SELECT products.productname,COUNT(DISTINCT Orders.customer_id) AS uniqueorders
-FROM orderdetails JOIN products ON orderdetails.product_id=products.product_id
-JOIN Orders ON orderdetails.order_id=Orders.order_id GROUP BY products.productname;
+SELECT Products.productname,COUNT(DISTINCT Orders.customer_id) AS uniqueorders
+FROM OrderDetails JOIN Products ON OrderDetails.product_id=Products.product_id
+JOIN Orders ON OrderDetails.order_id=Orders.order_id GROUP BY Products.productname;
