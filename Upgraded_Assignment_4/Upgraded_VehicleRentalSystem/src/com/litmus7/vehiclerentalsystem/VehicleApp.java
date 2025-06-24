@@ -35,3 +35,60 @@ public class VehicleApp {
 	}
 
 }
+
+
+//SAMPLE OUTPUT: 
+//Loaded Vehicles: 
+//
+//After adding New Vehicle: 
+//Brand: Toyota
+//Model: Corolla
+//Rental Price/Day: 45.5
+//Number of Doors: 4
+//Automatic: true
+//
+//Brand: Yamaha
+//Model: R15
+//Rental Price/Day: 30.0
+//Has Gear: true
+//Engine Capacity (cc): 150cc
+//
+//Brand: Ford
+//Model: Focus
+//Rental Price/Day: 50.0
+//Number of Doors: 5
+//Automatic: false
+//
+//Brand: Honda
+//Model: CBR
+//Rental Price/Day: 35.5
+//Has Gear: false
+//Engine Capacity (cc): 250cc
+//
+//Brand: Chevrolet
+//Model: Malibu
+//Rental Price/Day: 55.0
+//Number of Doors: 4
+//Automatic: true
+//
+//Brand: Suzuki
+//Model: GSX
+//Rental Price/Day: 40.0
+//Has Gear: true
+//Engine Capacity (cc): 200cc
+//
+//Brand: Hero
+//Model: Splendor
+//Rental Price/Day: 25.0
+//Has Gear: true
+//Engine Capacity (cc): 110cc
+//
+//Search vehicle by keyword: 
+//honda
+//Brand: Honda
+//Model: CBR
+//Rental Price/Day: 35.5
+//Has Gear: false
+//Engine Capacity (cc): 250cc
+//
+//Total Rental Price of vehicles is: 281.0
