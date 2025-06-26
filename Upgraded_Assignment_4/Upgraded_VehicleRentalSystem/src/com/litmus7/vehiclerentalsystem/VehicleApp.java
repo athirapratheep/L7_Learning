@@ -1,6 +1,8 @@
 package com.litmus7.vehiclerentalsystem;
 
 import com.litmus7.vehiclerentalsystem.dto.*;
+import com.litmus7.vehiclerentalsystem.service.VehicleService;
+
 import java.util.Scanner;
 
 /**

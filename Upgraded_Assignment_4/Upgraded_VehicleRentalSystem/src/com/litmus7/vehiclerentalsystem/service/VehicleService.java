@@ -1,4 +1,4 @@
-package com.litmus7.vehiclerentalsystem;
+package com.litmus7.vehiclerentalsystem.service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
