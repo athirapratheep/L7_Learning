@@ -3,6 +3,7 @@ package com.litmus7.vehiclerentalsystem;
 import com.litmus7.vehiclerentalsystem.dto.*;
 import com.litmus7.vehiclerentalsystem.service.VehicleService;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -28,7 +29,7 @@ public class VehicleApp {
 		Vehicle newBike = new Bike("Hero", "Splendor", 25, true, 110);
 		service.addVehicle(newBike);
 		System.out.println("\nAfter adding New Vehicle: ");
-		service.displayAllVehicles();
+		displayAllVehicles(service.getVehicles());
 		System.out.println("Search vehicle by keyword: ");
 		String keyword = scanner.nextLine();
 		service.searchByBrandOrModel(keyword);
@@ -36,8 +37,17 @@ public class VehicleApp {
 		System.out.println("Total Rental Price of vehicles is: " + service.totalRentalPrice());
 	}
 
-}
+	/**
+	 * Displays the details of all vehicles.
+	 */
+	public static void displayAllVehicles(List<Vehicle> vehicles) {
+		for (Vehicle v : vehicles) {
+			v.displayDetails();
+			System.out.println();
+		}
+	}
 
+}
 
 //SAMPLE OUTPUT: 
 //Loaded Vehicles: 
