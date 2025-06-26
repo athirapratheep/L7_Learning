@@ -11,6 +11,15 @@ import com.litmus7.vehiclerentalsystem.dto.*;
 /**
  * Service class that manages the list of vehicles.
  */
+/**
+ * 
+ */
+/**
+ * 
+ */
+/**
+ * 
+ */
 public class VehicleService {
 	private List<Vehicle> vehicles = new ArrayList<>();
 
@@ -20,7 +29,8 @@ public class VehicleService {
 	 * @param vehiclesFile the filename to load vehicles from Each line in the file
 	 *                     represents a car or bike in CSV format.
 	 */
-	public void loadVehicles(String vehiclesFile) {
+	public List<Vehicle> loadVehicles(String vehiclesFile) {
+		List<Vehicle> vehicles = new ArrayList<>();
 		try (BufferedReader br = new BufferedReader(new FileReader("vehicles.txt"))) {
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -36,6 +46,7 @@ public class VehicleService {
 		} catch (IOException e) {
 			System.out.println("Error reading the file.");
 		}
+		return vehicles;
 	}
 
 	/**
@@ -49,13 +60,17 @@ public class VehicleService {
 	 * @param searchword the brand or model to search Searches and displays vehicles
 	 *                   matching a given model or brand
 	 */
-	public void searchByBrandOrModel(String searchword) {
-		for (Vehicle v : vehicles) {
+	public void searchByBrandOrModel(List<Vehicle> vehicleList, String searchword) {
+		boolean found = false;
+		for (Vehicle v : vehicleList) {
 			if (v.getBrand().equalsIgnoreCase(searchword) || v.getModel().equalsIgnoreCase(searchword)) {
 				v.displayDetails();
+				found = true;
 			}
 		}
-		System.out.println("No vehicle found.");
+		if (found==false) {
+			System.out.println("No vehicle found.");
+		}
 	}
 
 	/**
@@ -63,15 +78,11 @@ public class VehicleService {
 	 * 
 	 * @return total rental cost per day
 	 */
-	public double totalRentalPrice() {
+	public double totalRentalPrice(List<Vehicle> vehicleList) {
 		double total = 0;
-		for (Vehicle v : vehicles) {
+		for (Vehicle v : vehicleList) {
 			total += v.getrentalPricePerDay();
 		}
 		return total;
-	}
-
-	public List<Vehicle> getVehicles() {
-		return vehicles;
 	}
 }

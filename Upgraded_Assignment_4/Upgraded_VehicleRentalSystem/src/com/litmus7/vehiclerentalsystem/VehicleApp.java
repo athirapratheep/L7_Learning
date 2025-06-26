@@ -3,6 +3,7 @@ package com.litmus7.vehiclerentalsystem;
 import com.litmus7.vehiclerentalsystem.dto.*;
 import com.litmus7.vehiclerentalsystem.service.VehicleService;
 
+import java.security.Provider.Service;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,24 +25,25 @@ public class VehicleApp {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		VehicleService service = new VehicleService();
+		List<Vehicle> vehicleList=service.loadVehicles("vehicles.txt");
 		service.loadVehicles("vehicles.txt");
 		System.out.println("Loaded Vehicles: ");
 		Vehicle newBike = new Bike("Hero", "Splendor", 25, true, 110);
 		service.addVehicle(newBike);
 		System.out.println("\nAfter adding New Vehicle: ");
-		displayAllVehicles(service.getVehicles());
+		displayAllVehicles(vehicleList);
 		System.out.println("Search vehicle by keyword: ");
 		String keyword = scanner.nextLine();
-		service.searchByBrandOrModel(keyword);
+		service.searchByBrandOrModel(vehicleList,keyword);
 		System.out.println();
-		System.out.println("Total Rental Price of vehicles is: " + service.totalRentalPrice());
+		System.out.println("Total Rental Price of vehicles is: " + service.totalRentalPrice(vehicleList)); //not including the one added manually.
 	}
 
 	/**
 	 * Displays the details of all vehicles.
 	 */
-	public static void displayAllVehicles(List<Vehicle> vehicles) {
-		for (Vehicle v : vehicles) {
+	public static void displayAllVehicles(List<Vehicle> vehicleList) {
+		for (Vehicle v : vehicleList) {
 			v.displayDetails();
 			System.out.println();
 		}
@@ -103,4 +105,4 @@ public class VehicleApp {
 //Has Gear: false
 //Engine Capacity (cc): 250cc
 //
-//Total Rental Price of vehicles is: 281.0
+//Total Rental Price of vehicles is: 256.0
