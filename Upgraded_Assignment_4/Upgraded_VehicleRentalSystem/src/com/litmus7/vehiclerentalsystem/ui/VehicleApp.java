@@ -1,5 +1,6 @@
-package com.litmus7.vehiclerentalsystem;
+package com.litmus7.vehiclerentalsystem.ui;
 
+import com.litmus7.vehiclerentalsystem.controller.VehicleController;
 import com.litmus7.vehiclerentalsystem.dto.*;
 import com.litmus7.vehiclerentalsystem.service.VehicleService;
 
@@ -24,31 +25,31 @@ public class VehicleApp {
 	 */
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		VehicleService service = new VehicleService();
-		List<Vehicle> vehicleList=service.loadVehicles("vehicles.txt");
-		service.loadVehicles("vehicles.txt");
-		System.out.println("Loaded Vehicles: ");
-		Vehicle newBike = new Bike("Hero", "Splendor", 25, true, 110);
-		service.addVehicle(newBike);
-		System.out.println("\nAfter adding New Vehicle: ");
-		displayAllVehicles(vehicleList);
-		System.out.println("Search vehicle by keyword: ");
-		String keyword = scanner.nextLine();
-		service.searchByBrandOrModel(vehicleList,keyword);
-		System.out.println();
-		System.out.println("Total Rental Price of vehicles is: " + service.totalRentalPrice(vehicleList)); //not including the one added manually.
-	}
+		VehicleController controller = new VehicleController();
+		Response response = controller.dataFromFile("vehicles.txt");
 
-	/**
-	 * Displays the details of all vehicles.
-	 */
-	public static void displayAllVehicles(List<Vehicle> vehicleList) {
-		for (Vehicle v : vehicleList) {
-			v.displayDetails();
-			System.out.println();
+		if (response.getStatusCode() == 200) {
+			System.out.println("Loaded vehicles:");
+			printVehicles(response.getVehicles());
+		} else {
+			System.out.println("Error: " + response.getErrorMessage());
+			return;
+		}
+
+		Vehicle newBike = new Bike("Hero", "Splendor", 25, true, 110);
+		Response addResponse = controller.addVehicle(newBike);
+		System.out.println("\n Add vehicle status: " + addResponse.getErrorMessage());
+		if (addResponse.getStatusCode() == 200) {
+			System.out.println("Updated Vehicles:");
+			printVehicles(addResponse.getVehicles());
 		}
 	}
 
+	private static void printVehicles(List<Vehicle> vehicles) {
+		for (Vehicle v : vehicles) {
+			System.out.println(v);
+		}
+	}
 }
 
 //SAMPLE OUTPUT: 

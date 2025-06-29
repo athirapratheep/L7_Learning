@@ -1,6 +1,6 @@
 package com.litmus7.vehiclerentalsystem.dto;
 
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class Bike extends Vehicle {
 	/**
@@ -32,25 +32,13 @@ public class Bike extends Vehicle {
 		this.engineCapacity = engineCapacity;
 	}
 
-	/**
-	 * Accepts bike specific details from the user in addition to vehicle details.
-	 */
-	public void inputDetails() {
-		super.inputDetails();
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Does it have gears(true/false)? ");
-		hasGear = scanner.nextBoolean();
-		System.out.println("Enter engine capacity: ");
-		engineCapacity = scanner.nextInt();
-
-	}
-
-	/**
-	 * Displays bike specific details along with vehicle details.
-	 */
-	public void displayDetails() {
-		super.displayDetails();
-		System.out.println("Has Gear: " + hasGear);
-		System.out.println("Engine Capacity (cc): " + engineCapacity + "cc");
+	public String toString() {
+		return "Bike{" +
+                "brand='" + getBrand() + '\'' +
+                ", model='" + getModel() + '\'' +
+                ", rentalPricePerDay=" + getrentalPricePerDay() +
+                ", hasGear="+ hasGear+
+                ", engineCapacity="+engineCapacity+
+                '}';
 	}
 }
