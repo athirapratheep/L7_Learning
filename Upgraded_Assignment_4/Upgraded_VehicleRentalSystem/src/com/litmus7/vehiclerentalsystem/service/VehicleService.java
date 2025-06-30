@@ -12,21 +12,21 @@ import com.litmus7.vehiclerentalsystem.exception.VehicleDataAccessException;
 import com.litmus7.vehiclerentalsystem.exception.VehicleServiceException;
 
 /**
- * Service class that manages the list of vehicles.
- */
-/**
- * 
- */
-/**
- * 
- */
-/**
- * 
+ * Service class for Vehicle Rental System. Contains business logic for managing
+ * vehicles. Calls DAO layer for data access. Handles validations and prevents
+ * duplicate entries.
  */
 public class VehicleService {
 	private List<Vehicle> vehicles = new ArrayList<>();
 	VehicleFileDao vehicleFileDAO = new VehicleFileDao();
 
+	/**
+	 * Loads vehicle data from file using DAO.
+	 * 
+	 * @param vehiclesFile path to vehicle data file
+	 * @return list of vehicles
+	 * @throws VehicleServiceException if file reading fails
+	 */
 	public List<Vehicle> dataFromFile(String vehiclesFile) throws VehicleServiceException {
 		try {
 			vehicles = vehicleFileDAO.getAllVehiclesFromFile(vehiclesFile);
@@ -36,6 +36,13 @@ public class VehicleService {
 		return vehicles;
 	}
 
+	/**
+	 * Adds a new vehicle if it does not already exist.
+	 * 
+	 * @param vehicle vehicle to add
+	 * @return success manage
+	 * @throws VehicleServiceException if vehicle already exists
+	 */
 	public String addVehicle(Vehicle vehicle) throws VehicleServiceException {
 		if (!vehicles.contains(vehicle)) {
 			vehicles.add(vehicle);
@@ -44,6 +51,11 @@ public class VehicleService {
 		throw new VehicleServiceException("Vehicle already exists");
 	}
 
+	/**
+	 * Gets the current list of vehicles
+	 * 
+	 * @return list of vehicles
+	 */
 	public List<Vehicle> getVehicles() {
 		return vehicles;
 	}

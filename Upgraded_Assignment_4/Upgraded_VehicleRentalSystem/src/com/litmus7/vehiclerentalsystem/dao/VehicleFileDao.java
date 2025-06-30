@@ -12,7 +12,18 @@ import com.litmus7.vehiclerentalsystem.dto.Car;
 import com.litmus7.vehiclerentalsystem.dto.Vehicle;
 import com.litmus7.vehiclerentalsystem.exception.VehicleDataAccessException;
 
+/**
+ * DAO class for accessing vehicle data from files. Reads data and converts it
+ * to Vehicle, Car, or Bike objects.
+ */
 public class VehicleFileDao {
+	/**
+	 * Reads all vehicles from a given file.
+	 * 
+	 * @param vehiclesFile path to the data file
+	 * @return list of vehicles
+	 * @throws VehicleDataAccessException if file reading fails
+	 */
 	public List<Vehicle> getAllVehiclesFromFile(String vehiclesFile) throws VehicleDataAccessException {
 		List<Vehicle> vehicles = new ArrayList<>();
 		try (BufferedReader bf = new BufferedReader(new FileReader(vehiclesFile))) {
@@ -31,6 +42,10 @@ public class VehicleFileDao {
 		return vehicles;
 	}
 
+	/**
+	 * @param line each vehicle from the file
+	 * @return new objects
+	 */
 	public Vehicle parseVehicle(String line) {
 		String[] parts = line.split(",");
 		if (parts[0].equalsIgnoreCase("Car")) {

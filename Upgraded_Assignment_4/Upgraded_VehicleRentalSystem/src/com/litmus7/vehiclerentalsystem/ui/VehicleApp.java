@@ -9,23 +9,25 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Main application class to test vehicle rental system. Demonstrates use of
- * inheritance, constructors, and method overriding. It creates and displays
- * both Car and Bike objects using default and parameterized constructors. This
- * serves as the driver class for the entire application.
+ * Main application class for the vehicle rental system. Demonstrates file
+ * loading, adding vehicles, and displaying all vehicles. Acts as an entry point
+ * for the application. Uses VehicleController to communicate with service and
+ * DAO layers.
  * 
  * @author athirapratheep
  * @since 2025
  */
 public class VehicleApp {
-
 	/**
-	 * @param args main method reads input from a file and adds a new vehicle to the
-	 *             system
+	 * Main method that loads vehicles from file, adds a new bike and displays
+	 * updated list
+	 * 
+	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		VehicleController controller = new VehicleController();
+		// Loads vehicles from file.
 		Response response = controller.dataFromFile("vehicles.txt");
 
 		if (response.getStatusCode() == 200) {
@@ -35,7 +37,7 @@ public class VehicleApp {
 			System.out.println("Error: " + response.getErrorMessage());
 			return;
 		}
-
+		// Adds a new Bike.
 		Vehicle newBike = new Bike("Hero", "Splendor", 25, true, 110);
 		Response addResponse = controller.addVehicle(newBike);
 		System.out.println("\n Add vehicle status: " + addResponse.getErrorMessage());
@@ -45,6 +47,11 @@ public class VehicleApp {
 		}
 	}
 
+	/**
+	 * Prints all vehicles in the given list.
+	 * 
+	 * @param vehicles list of vehicles to print
+	 */
 	private static void printVehicles(List<Vehicle> vehicles) {
 		for (Vehicle v : vehicles) {
 			System.out.println(v);

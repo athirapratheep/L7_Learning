@@ -31,15 +31,13 @@ public class Car extends Vehicle {
 		this.numberOfDoors = numberOfDoors;
 		this.isAutomatic = isAutomatic;
 	}
+
+	/**
+	 * displaying the objects.
+	 */
 	public String toString() {
-		return "Car{" +
-                "brand='" + getBrand() + '\'' +
-                ", model='" + getModel() + '\'' +
-                ", rentalPricePerDay=" + getrentalPricePerDay() +
-                ", Number of doors="+ numberOfDoors+
-                ", isAutomatic="+isAutomatic+
-                '}';
+		return "Car{" + "brand='" + getBrand() + '\'' + ", model='" + getModel() + '\'' + ", rentalPricePerDay="
+				+ getrentalPricePerDay() + ", Number of doors=" + numberOfDoors + ", isAutomatic=" + isAutomatic + '}';
 	}
 
-	
 }

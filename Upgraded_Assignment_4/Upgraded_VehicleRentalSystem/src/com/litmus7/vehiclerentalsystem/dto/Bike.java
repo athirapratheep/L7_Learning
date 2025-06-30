@@ -32,13 +32,11 @@ public class Bike extends Vehicle {
 		this.engineCapacity = engineCapacity;
 	}
 
+	/**
+	 * displaying the objects
+	 */
 	public String toString() {
-		return "Bike{" +
-                "brand='" + getBrand() + '\'' +
-                ", model='" + getModel() + '\'' +
-                ", rentalPricePerDay=" + getrentalPricePerDay() +
-                ", hasGear="+ hasGear+
-                ", engineCapacity="+engineCapacity+
-                '}';
+		return "Bike{" + "brand='" + getBrand() + '\'' + ", model='" + getModel() + '\'' + ", rentalPricePerDay="
+				+ getrentalPricePerDay() + ", hasGear=" + hasGear + ", engineCapacity=" + engineCapacity + '}';
 	}
 }

@@ -29,6 +29,7 @@ public class Vehicle {
 		this.model = model;
 		this.rentalPricePerDay = rentalPricePerDay;
 	}
+
 	/**
 	 * @return brand getter for brand
 	 */
@@ -49,11 +50,12 @@ public class Vehicle {
 	public double getrentalPricePerDay() {
 		return rentalPricePerDay;
 	}
+
+	/**
+	 * displaying the objects
+	 */
 	public String toString() {
-		return "Vehicle{" +
-                "brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", rentalPricePerDay=" + rentalPricePerDay +
-                '}';
+		return "Vehicle{" + "brand='" + brand + '\'' + ", model='" + model + '\'' + ", rentalPricePerDay="
+				+ rentalPricePerDay + '}';
 	}
 }
