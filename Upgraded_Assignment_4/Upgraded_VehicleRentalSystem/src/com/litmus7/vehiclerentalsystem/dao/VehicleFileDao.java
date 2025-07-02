@@ -30,7 +30,7 @@ public class VehicleFileDao {
 			String line;
 			while ((line = bf.readLine()) != null) {
 				Vehicle vehicle = parseVehicle(line);
-				if (vehicles != null) {
+				if (vehicle != null) {
 					vehicles.add(vehicle);
 				}
 			}

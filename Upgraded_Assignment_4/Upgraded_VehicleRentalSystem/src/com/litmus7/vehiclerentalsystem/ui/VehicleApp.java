@@ -28,22 +28,22 @@ public class VehicleApp {
 		Scanner scanner = new Scanner(System.in);
 		VehicleController controller = new VehicleController();
 		// Loads vehicles from file.
-		Response response = controller.dataFromFile("vehicles.txt");
+		Response<List<Vehicle>> response = controller.dataFromFile("vehicles.txt");
 
 		if (response.getStatusCode() == 200) {
-			System.out.println("Loaded vehicles:");
-			printVehicles(response.getVehicles());
+			System.out.println("Loaded vehicles:" + response.getErrorMessage());
+			printVehicles(response.getData());
 		} else {
 			System.out.println("Error: " + response.getErrorMessage());
 			return;
 		}
 		// Adds a new Bike.
 		Vehicle newBike = new Bike("Hero", "Splendor", 25, true, 110);
-		Response addResponse = controller.addVehicle(newBike);
-		System.out.println("\n Add vehicle status: " + addResponse.getErrorMessage());
+		Response<List<Vehicle>> addResponse = controller.addVehicle(newBike);
+		System.out.println("\nAdd vehicle status: " + addResponse.getErrorMessage());
 		if (addResponse.getStatusCode() == 200) {
 			System.out.println("Updated Vehicles:");
-			printVehicles(addResponse.getVehicles());
+			printVehicles(addResponse.getData());
 		}
 	}
 

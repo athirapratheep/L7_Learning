@@ -23,16 +23,16 @@ public class VehicleController {
 	 * @param vehicleFile path to the file containing vehicle data
 	 * @return response object containing vehicles or error info
 	 */
-	public Response dataFromFile(String vehicleFile) {
-		Response response = new Response();
-		List<Vehicle> vehicles = null;
+	public Response<List<Vehicle>> dataFromFile(String vehicleFile) {
+		Response<List<Vehicle>> response = new Response<>();
 		try {
-			vehicles = vehicleService.dataFromFile(vehicleFile);
+			List<Vehicle> vehicles = vehicleService.dataFromFile(vehicleFile);
 			response.setStatusCode(SUCCESS_STATUS_CODE);
-			response.setVehicles(vehicles);
+			response.setErrorMessage("Vehicles loaded successfully");
+			response.setData(vehicles);
 		} catch (VehicleServiceException e) {
 			response.setStatusCode(ERROR_STATUS_CODE);
-			response.setErrorMessage("couldnt load file");
+			response.setErrorMessage("couldnt load file: " + e.getMessage());
 		}
 		return response;
 	}
@@ -43,16 +43,17 @@ public class VehicleController {
 	 * @param vehicle vehicle to be added
 	 * @return response object containing updated vehicle list or error info
 	 */
-	public Response addVehicle(Vehicle vehicle) {
-		Response response = new Response();
+
+	public Response<List<Vehicle>> addVehicle(Vehicle vehicle) {
+		Response<List<Vehicle>> response = new Response<>();
 		try {
 			String message = vehicleService.addVehicle(vehicle);
 			response.setStatusCode(SUCCESS_STATUS_CODE);
 			response.setErrorMessage(message);
-			response.setVehicles(vehicleService.getVehicles());
+			response.setData(vehicleService.getVehicles());
 		} catch (VehicleServiceException e) {
 			response.setStatusCode(ERROR_STATUS_CODE);
-			response.setErrorMessage(e.getMessage());
+			response.setErrorMessage("Failed to add vehicle:" + e.getMessage());
 		}
 		return response;
 	}

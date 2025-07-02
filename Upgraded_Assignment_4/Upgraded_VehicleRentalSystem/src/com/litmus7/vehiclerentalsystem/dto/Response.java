@@ -4,14 +4,20 @@ import java.util.List;
 
 /**
  * Response class that encapsulates response data and status for controller
- * methods. Holds status code, error message, and list of vehicles. Used to
+ * methods. Holds status code, error message, and any type of data. Used to
  * communicate back to UI layer.
  */
-public class Response {
+public class Response<T> {
 	private int statusCode;
 	private String errorMessage;
-	private List<Vehicle> vehicles;
-
+	private T data;
+	
+	public Response() {}
+	public Response (int statusCode,String errorMessage,T data) {
+		this.statusCode=statusCode;
+		this.errorMessage=errorMessage;
+		this.data=data;
+	}
 	/**
 	 * @return status code
 	 */
@@ -42,16 +48,16 @@ public class Response {
 	}
 
 	/**
-	 * @return list of vehicles
+	 * @return any type of data
 	 */
-	public List<Vehicle> getVehicles() {
-		return vehicles;
+	public T getData() {
+		return data;
 	}
 
 	/**
-	 * @param vehicles list of vehicles to set
+	 * @param data	any type of data
 	 */
-	public void setVehicles(List<Vehicle> vehicles) {
-		this.vehicles = vehicles;
+	public void setData(T data) {
+		this.data = data;
 	}
 }
