@@ -1,7 +1,5 @@
 package com.litmus7.vehiclerentalsystem.dto;
 
-import java.util.List;
-
 /**
  * Response class that encapsulates response data and status for controller
  * methods. Holds status code, error message, and any type of data. Used to
