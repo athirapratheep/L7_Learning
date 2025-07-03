@@ -59,35 +59,32 @@ public class VehicleService {
 	public List<Vehicle> getVehicles() {
 		return vehicles;
 	}
+	/**
+	 * @param searchword the brand or model to search Searches and displays vehicles
+	 *                   matching a given model or brand
+	 */
+
+	public List<Vehicle> searchByBrandOrModel(String keyword) {
+	    List<Vehicle> result = new ArrayList<>();
+	    for (Vehicle v : vehicles) {
+	        if (v.getBrand().equalsIgnoreCase(keyword) || v.getModel().equalsIgnoreCase(keyword)) {
+	            result.add(v);
+	        }
+	    }
+	    return result;
+	}
+	/**
+	 * Calculates the total rental price of all vehicles per day
+	 * 
+	 * @return total rental cost per day
+	 */
+	public double totalRentalPrice() {
+	    double total = 0;
+	    for (Vehicle v : vehicles) {
+	        total += v.getrentalPricePerDay();
+	    }
+	    return total;
+	}
 }
 
-//	/**
-//	 * @param searchword the brand or model to search Searches and displays vehicles
-//	 *                   matching a given model or brand
-//	 */
-//	public void searchByBrandOrModel(List<Vehicle> vehicleList, String searchword) {
-//		boolean found = false;
-//		for (Vehicle v : vehicleList) {
-//			if (v.getBrand().equalsIgnoreCase(searchword) || v.getModel().equalsIgnoreCase(searchword)) {
-//				v.displayDetails();
-//				found = true;
-//			}
-//		}
-//		if (found == false) {
-//			System.out.println("No vehicle found.");
-//		}
-//	}
-//
-//	/**
-//	 * Calculates the total rental price of all vehicles per day
-//	 * 
-//	 * @return total rental cost per day
-//	 */
-//	public double totalRentalPrice(List<Vehicle> vehicleList) {
-//		double total = 0;
-//		for (Vehicle v : vehicleList) {
-//			total += v.getrentalPricePerDay();
-//		}
-//		return total;
-//	}
-//}
+

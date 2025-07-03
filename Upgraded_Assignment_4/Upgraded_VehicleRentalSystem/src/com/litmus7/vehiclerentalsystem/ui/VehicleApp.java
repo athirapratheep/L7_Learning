@@ -45,6 +45,18 @@ public class VehicleApp {
 			System.out.println("Updated Vehicles:");
 			printVehicles(addResponse.getData());
 		}
+		System.out.println("Enter the keyword to search");
+		String keyword=scanner.nextLine();
+		Response<List<Vehicle>> searchResponse = controller.searchVehicles(keyword);
+		if (searchResponse.getStatusCode() == 200) {
+		    System.out.println("Search results:");
+		    printVehicles(searchResponse.getData());
+		} else {
+		    System.out.println(searchResponse.getErrorMessage());
+		}
+
+		Response<Double> priceResponse = controller.getTotalRentalPrice();
+		System.out.println("Total Rental Price of all vehicles: " + priceResponse.getData());
 	}
 
 	/**
@@ -57,6 +69,7 @@ public class VehicleApp {
 			System.out.println(v);
 		}
 	}
+	
 }
 
 //SAMPLE OUTPUT: 

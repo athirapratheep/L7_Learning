@@ -57,4 +57,25 @@ public class VehicleController {
 		}
 		return response;
 	}
+	public Response<List<Vehicle>> searchVehicles(String keyword) {
+	    Response<List<Vehicle>> response = new Response<>();
+	    List<Vehicle> result = vehicleService.searchByBrandOrModel(keyword);
+
+	    if (!result.isEmpty()) {
+	        response.setStatusCode(200);
+	        response.setData(result);
+	    } else {
+	        response.setStatusCode(404);
+	        response.setErrorMessage("No vehicles found for keyword: " + keyword);
+	    }
+	    return response;
+	}
+
+	public Response<Double> getTotalRentalPrice() {
+	    Response<Double> response = new Response<>();
+	    double total = vehicleService.totalRentalPrice();
+	    response.setStatusCode(200);
+	    response.setData(total);
+	    return response;
+	}
 }
