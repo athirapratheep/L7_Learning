@@ -7,7 +7,7 @@ import com.litmus7.userregistration.service.UserRegistrationService;
 import com.litmus7.userregistration.exception.*;
 
 public class UserRegistrationController {
-	private UserRegistrationService userService = new UserRegistrationService();
+	private UserRegistrationService userRegistrationService = new UserRegistrationService();
 
 	public void startRegistration() {
 		Scanner scanner=new Scanner(System.in);
@@ -21,7 +21,7 @@ public class UserRegistrationController {
 			System.out.println("Enter Password: ");
 			String password=scanner.nextLine();
 			User user=new User(username,age,email,password);
-			userService.registerUser(user);
+			userRegistrationService.registerUser(user);
 			System.out.println("Registration successful! \nUser Details: "+user);
 			
 		}catch(InvalidAgeException | InvalidEmailException | WeakPasswordException | DatabaseException e) {
@@ -31,6 +31,7 @@ public class UserRegistrationController {
 		}catch(IllegalArgumentException e) {
 			System.out.println("Error: "+e.getMessage());
 		}finally {
+			
 			scanner.close();
 		}
 	}
