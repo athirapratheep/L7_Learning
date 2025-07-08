@@ -1,0 +1,5 @@
+package com.litmus7.userregistration.exception;
+
+public class InvalidAgeException {
+
+}

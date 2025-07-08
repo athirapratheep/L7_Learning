@@ -1,0 +1,5 @@
+package com.litmus7.userregistration.service;
+
+public class UserService {
+
+}
