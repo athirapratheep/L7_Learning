@@ -22,7 +22,7 @@ public class DBUtil {
 			password = props.getProperty("jdbc.password");
 			driverClassName = props.getProperty("jdbc.driverClassName");
 
-		//	Class.forName(driverClassName);
+			Class.forName(driverClassName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -22,31 +22,24 @@ public class ProductDAOImpl implements ProductDAO {
 			pstmt.setString(3, product.getCategory());
 			pstmt.setDouble(4, product.getPrice());
 			pstmt.setInt(5, product.getStockQuantity());
-
-			int rowsAffected = pstmt.executeUpdate();
-			if (rowsAffected > 0) {
-				System.out.println("Product added successfully!");
-			} else {
-				System.out.println("Failed to add product.");
-			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error adding product: " + e.getMessage());
 		}
 	}
 
 	@Override
 	public Product getProductById(int productId) {
-		String sql = "SELECT * FROM products WHERE productId=?";
+		String sql = "SELECT productId,name,category,price,stockQuantity FROM products WHERE productId=?;";
 		try (Connection conn = DBUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, productId);
 			try (ResultSet rs = pstmt.executeQuery()) {
-				while (rs.next()) {
+				if (rs.next()) {
 					return new Product(rs.getInt("productId"), rs.getString("name"), rs.getString("category"),
 							rs.getDouble("price"), rs.getInt("stockQuantity"));
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error fetching the product by id: " + e.getMessage());
 		}
 		System.out.println("Product ID: " + productId + " not found!");
 		return null;
@@ -55,7 +48,7 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public List<Product> getAllProducts() {
 		List<Product> list = new ArrayList<>();
-		String sql = "SELECT * FROM products";
+		String sql = "SELECT productId,name,category,price,stockQuantity FROM products;";
 		try (Connection conn = DBUtil.getConnection();
 				Statement st = conn.createStatement();
 				ResultSet rs = st.executeQuery(sql)) {
@@ -66,46 +59,53 @@ public class ProductDAOImpl implements ProductDAO {
 				list.add(p);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error fetching all the products: " + e.getMessage());
 		}
 		return list;
 	}
 
 	@Override
 	public void updateProduct(Product product) {
-		String sql = "UPDATE products SET name=?,category=?,price=?,stockQuantity=? WHERE productId=?";
+		String sql = "UPDATE products SET name=?,category=?,price=?,stockQuantity=? WHERE productId=?;";
 		try (Connection conn = DBUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, product.getName());
 			pstmt.setString(2, product.getCategory());
 			pstmt.setDouble(3, product.getPrice());
 			pstmt.setInt(4, product.getStockQuantity());
 			pstmt.setInt(5, product.getProductId());
-			int rowsAffected = pstmt.executeUpdate();
-			if (rowsAffected > 0) {
-				System.out.println("Product updated successfully!");
-			} else {
-				System.out.println("Update failed, Product with id: "+product.getProductId()+" not found.");
-			}
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error updating the product: " + e.getMessage());
 		}
 	}
 
 	@Override
 	public void deleteProduct(int productId) {
-		String sql = "DELETE FROM products WHERE productId=?";
+		String sql = "DELETE FROM products WHERE productId=?;";
 		try (Connection conn = DBUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, productId);
-			int rowsAffected = pstmt.executeUpdate();
-			if (rowsAffected > 0) {
-				System.out.println("Product deleted successfully!");
-			} else {
-				System.out.println("Deletion failed, Product with id: "+ productId+" not found");
-			}
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error deleting the product: " + e.getMessage());
 		}
 
+	}
+
+	@Override
+	public Product getProductByName(String name) {
+		try (Connection conn = DBUtil.getConnection();
+				PreparedStatement pstmt = conn
+						.prepareStatement("SELECT name,category,price,stockQuantity FROM products WHERE name=?")) {
+			pstmt.setString(1, name);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return new Product(rs.getInt("productId"), rs.getString("name"), rs.getString("category"),
+						rs.getDouble("price"), rs.getInt("stockQuantity"));
+			}
+		} catch (SQLException e) {
+			System.out.println("Error fetching the product by name: " + e.getMessage());
+		}
+		return null;
 	}
 
 }

@@ -1,18 +1,15 @@
 package com.litmus7.retail.app;
 
-import java.util.List;
 import java.util.Scanner;
 
-
-import com.litmus7.retail.dao.ProductDAO;
-import com.litmus7.retail.dao.ProductDAOImpl;
+import com.litmus7.retail.controller.ProductController;
 import com.litmus7.retail.dto.Product;
 
 public class ProductApp {
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		ProductDAO productDao = new ProductDAOImpl();
+		ProductController controller = new ProductController();
 		while (true) {
 			System.out.println("\n---RetailMart Product Catalog---");
 			System.out.println("1. Add Product");
@@ -40,52 +37,36 @@ public class ProductApp {
 				int stockQuantity = scanner.nextInt();
 
 				Product product = new Product(productId, name, category, price, stockQuantity);
-				productDao.addProduct(product);
+				controller.addProduct(product);
 				break;
 			case 2:
 				System.out.println("Enter ProductId to search:");
 				int searchId = scanner.nextInt();
-				Product found = productDao.getProductById(searchId);
-				if (found != null) {
-					System.out.println(found);
-				}
+				controller.viewProductById(searchId);
 				break;
 			case 3:
-				List<Product> allProducts = productDao.getAllProducts();
-				if (allProducts.isEmpty()) {
-					System.out.println("No products found.");
-				} else {
-					for (Product p : allProducts) {
-						System.out.println(p);
-					}
-				}
+				controller.viewAllProducts();
 				break;
 			case 4:
 				System.out.println("Enter product id to update: ");
 				int updateId = scanner.nextInt();
 				scanner.nextLine();
-				Product updateObject = productDao.getProductById(updateId);
-				if (updateObject != null) {
-					System.out.print("Enter new name (current: " + updateObject.getName() + "): ");
-					String newName = scanner.nextLine();
-					System.out.print("Enter new category (current: " + updateObject.getCategory() + "): ");
-					String newCategory = scanner.nextLine();
-					System.out.print("Enter new price (current: " + updateObject.getPrice() + "): ");
-					double newPrice = scanner.nextDouble();
-					System.out.print("Enter new stock (current: " + updateObject.getStockQuantity() + "): ");
-					int newStockQuantity = scanner.nextInt();
-					updateObject.setName(newName);
-					updateObject.setCategory(newCategory);
-					updateObject.setPrice(newPrice);
-					updateObject.setStockQuantity(newStockQuantity);
-
-					productDao.updateProduct(updateObject);
-				}
+				controller.viewProductById(updateId);
+				System.out.print("Enter new name : ");
+				String newName = scanner.nextLine();
+				System.out.print("Enter new category : ");
+				String newCategory = scanner.nextLine();
+				System.out.print("Enter new price : ");
+				double newPrice = scanner.nextDouble();
+				System.out.print("Enter new stock : ");
+				int newStockQuantity = scanner.nextInt();
+				Product updatedProduct = new Product(updateId, newName, newCategory, newPrice, newStockQuantity);
+				controller.updateProduct(updatedProduct);
 				break;
 			case 5:
 				System.out.println("Enter product id to delete: ");
 				int deleteId = scanner.nextInt();
-				productDao.deleteProduct(deleteId);
+				controller.deleteProduct(deleteId);
 				break;
 			case 6:
 				System.out.println("Thank you for using RetailMart Product Catalog Manager.\nGoodbye!");
